@@ -65,6 +65,8 @@ while attempts_used < max_attempts:
                 won = True
                 break
 
+            print(f"Attempts remaining: {max_attempts - attempts_used}")
+
         else:
             print(f"Please enter a number from {low} to {high}.")
 
