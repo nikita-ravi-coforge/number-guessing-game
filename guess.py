@@ -8,10 +8,30 @@ TIME_LIMIT = 60       # Seconds allowed in Time Challenge mode
 print("Welcome to the Number Guessing Game")
 
 # ---------- Choose a level ----------
-# Fixed to 1-100 with 8 attempts for now. The level menu replaces this in feature/difficulty-levels.
+# keep asking until the player picks 1, 2 or 3
+while True:
+    print("Choose a level:")
+    print("1. Easy   (1 to 50, 10 attempts)")
+    print("2. Medium (1 to 100, 8 attempts)")
+    print("3. Hard   (1 to 500, 10 attempts)")
+    level = input("Enter 1, 2 or 3 \n").strip()
+
+    if level in ["1", "2", "3"]:                  # check - is it a valid level?
+        break
+
+    print("Please enter 1, 2 or 3.")
+
+# set the range and attempt limit for the chosen level
 low = 1
-high = 100
-max_attempts = 8
+if level == "1":
+    high = 50
+    max_attempts = 10
+elif level == "2":
+    high = 100
+    max_attempts = 8
+else:
+    high = 500
+    max_attempts = 10
 
 # ---------- Choose a mode ----------
 # Added in feature/time-challenge.
@@ -54,9 +74,6 @@ while attempts_used < max_attempts:
 # ---------- End of round ----------
 # show the result that matches how the round ended
 if won:
-    if attempts_used == 1:
-        print("Correct! You got it in 1 attempt.")
-    else:
-        print(f"Correct! You got it in {attempts_used} attempts.")
+    print(f"Correct! You got it in {attempts_used} attempts.")
 else:
     print(f"Out of attempts. The number was {secret_number}.")
