@@ -34,7 +34,22 @@ else:
     max_attempts = 10
 
 # ---------- Choose a mode ----------
-# Added in feature/time-challenge.
+# keep asking until the player picks Classic or Time Challenge
+while True:
+    print("Choose a mode:")
+    print("1. Classic")
+    print(f"2. Time Challenge ({TIME_LIMIT} seconds)")
+    mode = input("Enter 1 or 2 \n").strip()
+
+    if mode in ["1", "2"]:                        # check - is it a valid mode?
+        break
+
+    print("Please enter 1 or 2.")
+
+if mode == "2":
+    timed = True
+else:
+    timed = False
 
 # ---------- Set up the round ----------
 # use DEBUG_SECRET when testing, otherwise pick a random number in the range
@@ -45,10 +60,17 @@ else:
 
 attempts_used = 0
 won = False
+timed_out = False
+start_time = time.time()                          # start the clock once, before the loop
 
 # ---------- Guess loop ----------
-# keep asking until the player wins or runs out of attempts
+# keep asking until the player wins, runs out of attempts, or runs out of time
 while attempts_used < max_attempts:
+    # show the seconds remaining before each guess (Time Challenge only)
+    if timed:
+        remaining = max(0, TIME_LIMIT - (time.time() - start_time))
+        print(f"Time remaining: {round(remaining)} seconds")
+
     guess = input(f"Guess a number from {low} to {high} \n").strip()
 
     if guess.isdigit():                           # check - is it a whole number?
@@ -56,6 +78,11 @@ while attempts_used < max_attempts:
 
         if low <= guess_number <= high:           # check - is it in range?
             attempts_used += 1                    # only valid guesses use an attempt
+
+            # check - has time run out? (before the answer, so a late correct guess loses)
+            if timed and time.time() - start_time > TIME_LIMIT:
+                timed_out = True
+                break
 
             if guess_number > secret_number:      # check - compare with the secret
                 print("Too high.")
@@ -77,5 +104,7 @@ while attempts_used < max_attempts:
 # show the result that matches how the round ended
 if won:
     print(f"Correct! You got it in {attempts_used} attempts.")
+elif timed_out:
+    print(f"Time is up! The number was {secret_number}.")
 else:
     print(f"Out of attempts. The number was {secret_number}.")
