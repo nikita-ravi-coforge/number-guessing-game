@@ -103,7 +103,10 @@ while attempts_used < max_attempts:
 # ---------- End of round ----------
 # show the result that matches how the round ended
 if won:
-    print(f"Correct! You got it in {attempts_used} attempts.")
+    if attempts_used == 1:
+        print("Correct! You got it in 1 attempt.")
+    else:
+        print(f"Correct! You got it in {attempts_used} attempts.")
 elif timed_out:
     print(f"Time is up! The number was {secret_number}.")
 else:
